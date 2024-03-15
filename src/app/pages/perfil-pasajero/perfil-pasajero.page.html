@@ -1,0 +1,67 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="#1e1e1e">
+    <ion-buttons slot="start">
+      <ion-back-button style="color: white;" defaultHref="/inicio-pasajero" text="Volver"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="background">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">
+        <ion-thumbnail id="perfil-imagen"><img [src]="usuario.imagen"></ion-thumbnail>
+        <ion-label>{{usuario.nombre}}</ion-label><br>
+        <ion-label>{{usuario.correo}}</ion-label><br>
+        <ion-label>{{usuario.numero_cel}}</ion-label>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <!-- Formulario de datos del usuario -->
+      <ion-list>
+        <ion-item>
+          <ion-label position="stacked">Imagen de Perfil</ion-label>
+          <input type="file" accept="image/*" (change)="onFileSelected($event)" [(ngModel)]="usuario.imagen">
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Nombre</ion-label>
+          <ion-input [(ngModel)]="usuario.nombre" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Correo</ion-label>
+          <ion-input [(ngModel)]="usuario.correo" type="email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Número de Celular</ion-label>
+          <ion-input [(ngModel)]="usuario.numero_cel" type="tel"></ion-input>
+        </ion-item>
+
+      </ion-list>
+      <!-- Botón para guardar los cambios -->
+      <div style="text-align: center;">
+        <ion-button color="grey" (click)="guardarCambios()">Actualizar perfil</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Contraseña</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label position="stacked">Nueva Contraseña</ion-label>
+          <ion-input type="password" [(ngModel)]="nuevaContrasena"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Confirmar Nueva Contraseña</ion-label>
+          <ion-input type="password" [(ngModel)]="confirmarNuevaContrasena"></ion-input>
+        </ion-item>
+      </ion-list>
+      <div style="text-align: center;">
+        <ion-button color="grey" (click)="guardarCambios1()" [routerLink]="['/']">Cambiar Contraseña</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -1,0 +1,13 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="#1e1e1e">
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <app-map viewType="view"></app-map>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button size="large" color="danger" (click)="cancelarViaje()">
+      <ion-icon name="close-sharp"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

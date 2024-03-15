@@ -1,0 +1,162 @@
+<ion-header>
+  <ion-toolbar color="#1e1e1e">
+    <ion-buttons slot="start">
+      <ion-back-button style="color: white;" defaultHref="/home" text="Volver"></ion-back-button>
+    </ion-buttons>
+    <ion-title style="color: white;">Registro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="background">
+  <ion-card-content style="margin-top: 2rem; text-align: center;">
+    <ion-card-content style="margin-top: 1rem; background-color: white;">
+      <ion-text style="font-size: 20px; font-weight: bold; color:#1e1e1e;">Crea tu cuenta</ion-text>
+    </ion-card-content>
+  </ion-card-content>
+
+
+
+  <ion-card-content style="margin-top: 1rem;">
+    <ion-card-content style="margin-top: -2rem; background-color: white;">
+      <!-- foto de perfil -->
+      <ion-card-content>
+        <br>
+        <br>
+        <ion-card-content>
+          <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+            <ion-fab-button (click)="addPhotoToGallery()">
+              <ion-icon name="camera"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+
+          <ion-col size="6" *ngIf="lastPicture!=''">
+            <ion-img [src]="lastPicture"></ion-img>
+          </ion-col>
+
+        </ion-card-content>
+
+        <ion-card-content>
+          <ion-card-title class="ion-text-center">Foto de perfil</ion-card-title>
+        </ion-card-content>
+        <!-- inicio forma -->
+
+        <form (ngSubmit)="onSubmit()" [formGroup]="contactForm">
+
+
+          <!-- foto de perfil -->
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" id="imagen" />
+          <div class="input-error" *ngIf="formErrors['imagen_empty']">Seleccione una imagen</div>
+
+          <!-- Nombre Completo -->
+          <ion-item>
+            <ion-icon class="input-icon" name="person-outline"></ion-icon>
+            <ion-input name="nombre" type="text" placeholder="Nombre Completo" id="nombre" formControlName="nombre"
+              required [(ngModel)]="nombre" (input)="validarNombre()"></ion-input>
+          </ion-item>
+          <div class="input-error" *ngIf="formErrors['nombre_empty']">Este campo es obligatorio</div>
+          <div class="input-error" *ngIf="formErrors['nombre_short']">El campo tiene que tener un largo mayor a 3
+            caracteres</div>
+
+          <!-- Contraseña -->
+          <ion-item>
+            <ion-icon class="input-icon" name="key-outline"></ion-icon>
+            <ion-input name="pass" type="password" placeholder="Contraseña" id="pass" formControlName="pass"
+              [(ngModel)]="pass" required (input)="validarPass1()"></ion-input>
+          </ion-item>
+          <div class="input-error" *ngIf="formErrors['password_empty']">Este campo es obligatorio</div>
+          <div class="input-error" *ngIf="formErrors['password_short']">La contraseña tiene que ser mayor a 6 caracteres</div>
+          <div class="input-error" *ngIf="formErrors['password_needUppercase']">Debe contener al menos una mayúscula</div>
+          <div class="input-error" *ngIf="formErrors['password_needLowercase']">Debe contener al menos una minúscula</div>
+          <div class="input-error" *ngIf="formErrors['password_needNumber']">Debe contener al menos un número</div>
+          <div class="input-error" *ngIf="formErrors['password_needSpecial']">Debe contener al menos un carácter especial</div>
+
+          <ion-item lines="none">
+            <small>
+              La contraseña debe cumplir con los siguientes requisitos de seguridad:
+              <ul>
+                <li>Debe tener una longitud mayor a 6</li>
+                <li>Debe contener al menos una letra mayúscula</li>
+                <li>Debe contener al menos una letra minúscula</li>
+                <li>Debe contener al menos un caracter especial ("!", "$", "%", "&", "?", "@", o "*")</li>
+              </ul>
+            </small>
+          </ion-item>
+
+          <!-- Repetir Contraseña -->
+          <ion-item>
+            <ion-icon class="input-icon" name="key-outline"></ion-icon>
+            <ion-input name="pass2" type="password" placeholder="Repita la contraseña" id="pass2" required
+              formControlName="pass2" (input)="validarPass2()" [(ngModel)]="pass2" [pattern]="pass"></ion-input>
+          </ion-item>
+          <div class="input-error" *ngIf="formErrors['pass2_empty']">Este campo es obligatorio</div>
+          <div class="input-error" *ngIf="formErrors['pass2_noMatch']">Las contraseñas no coinciden</div>
+
+          <!-- Número de Teléfono -->
+          <ion-item>
+            <ion-icon class="input-icon" name="call-outline"></ion-icon>
+            <ion-input name="telefono" type="text" placeholder="Número de telefono" id="telefono" required
+              formControlName="telefono" [(ngModel)]="telefono" (input)="validarTelefono()">
+            </ion-input>
+          </ion-item>
+          <div class="input-error" *ngIf="formErrors['telefono_empty']">Este campo es obligatorio</div>
+          <div class="input-error" *ngIf="formErrors['telefono_invalid']">Ingrese un número de teléfono válido</div>
+
+          <!-- Correo Electrónico -->
+          <ion-item>
+            <ion-icon class="input-icon" name="mail-outline"></ion-icon>
+            <ion-input name="email" type="text" placeholder="Correo" id="email" required
+              formControlName="email" (input)="validarCorreo()" (change)="validarCorreoExiste()" [(ngModel)]="correo"></ion-input>
+          </ion-item>
+          <div class="input-error" *ngIf="formErrors['correo_empty']">Este campo es obligatorio</div>
+          <div class="input-error" *ngIf="formErrors['correo_invalid']">Ingrese un correo válido</div>
+          <div class="input-error" *ngIf="formErrors['correo_inUse']">Este correo no está disponible</div>
+
+          <br>
+          <div class="center-div">
+            <mat-radio-group aria-label="Select an option" formControlName="id_rol" [(ngModel)]="id_rol" (input)="validarRol(true)">
+              <mat-radio-button value="1">Conductor</mat-radio-button>
+              <mat-radio-button value="2">Pasajero</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="input-error" *ngIf="formErrors['rol_empty']">Seleccione un tipo de usuario</div>
+
+          <div *ngIf="id_rol==1">
+            <ion-item>
+              <ion-icon class="input-icon" name="car-outline"></ion-icon>
+              <ion-input name="patente" type="text" placeholder="Patente del Vehículo" [(ngModel)]="patente"
+                (input)="validarPatente()" formControlName="patente"></ion-input>
+            </ion-item>
+            <div class="input-error" *ngIf="formErrors['patente_empty']">Este campo es obligatorio</div>
+            <div class="input-error" *ngIf="formErrors['patente_invalid']">Patente inválida</div>
+
+            <ion-item>
+              <ion-icon class="input-icon" name="car-outline"></ion-icon>
+              <ion-input name="color" type="text" placeholder="Color" formControlName="color" [(ngModel)]="color"
+                (input)="validarColor()"></ion-input>
+            </ion-item>
+            <div class="input-error" *ngIf="formErrors['color_empty']">Este campo es obligatorio</div>
+
+            <ion-item>
+              <ion-icon class="input-icon" name="car-outline"></ion-icon>
+              <ion-input name="asientos" type="number" placeholder="N° de Asientos" formControlName="asientos" [(ngModel)]="asientos"
+                (input)="validarAsientos()"></ion-input>
+            </ion-item>
+            <div class="input-error" *ngIf="formErrors['asientos_empty']">Este campo es obligatorio</div>
+            <div class="input-error" *ngIf="formErrors['asientos_low']">Debe ser mayor a 0</div>
+          </div>
+
+          <div style="text-align: center;">
+            <ion-card-content style="margin-top: 20px; background-color: white;">
+              <ion-text style="text-align: center; font-size: 12px; color: var(--ion-color-medium)">Al hacer clic en
+                "Registrarse", aceptas nuestra <a href="#">Política de Privacidad</a> y nuestros <a href="#">Términos y
+                  Condiciones</a>.</ion-text>
+            </ion-card-content>
+          </div>
+
+          <div class="sign-btn-wrap">
+            <ion-button (click)="crearUsuario()" fill="solid"
+              shape="round" class="recuperar" [disabled]="registering">Registrarse</ion-button>
+          </div>
+          <div class="input-error" *ngIf="formErrors['has_empty_fields']">Tiene campos sin rellenar</div>
+        </form>
+      </ion-card-content>
